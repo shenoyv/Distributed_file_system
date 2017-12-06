@@ -1,28 +1,15 @@
-import sys
-import select
 import socket
-import threading
+import threadpool
 import time
-import random
-class Client():
-    command_list =["READ FILE","WRITE FILE","PWDIR","CHDIR","LS","QUIT"]
+import os
+client_thread_pool = threadpool.ThreadPool(5)
+ip_addr = socket.gethostbyname(socket.gethostname())
+port = 8018
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock_addr = (ip_addr, port)
+print("connecting to %s on port %s\n" % sock_addr)
+sock.connect(sock_addr)
 
-def __init__(self, add_rs):
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        #self.sock.connect((host, port))
-        #print(" connecting to %s:%s " %(host,port))
-        self.sock.connect ((self.addr_s,8018))
-        self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
-        while True:
-           self.Input =raw_input(":")
-           if any(x in self.message for x in self.command_list):
-               pass
-           else:
-               print"command not found\n"
-        s.sendall(self.Input)
-        if self.message == "Quit":
-            sys.exit()
         
 
 
