@@ -1,3 +1,4 @@
+
 import socket
 import threadpool
 import time
@@ -44,7 +45,8 @@ def server_res(socket):
         if (data != None):
             # if reading cache item
             if(len(data.split("////")) == 2):
-                data_seperate = data.split("////")
+                data_seperate = data.split("//"
+                                           "//")
                 add_to_cache(data_seperate[0], data_seperate[1])
                 print(data_seperate[1])
             else:
