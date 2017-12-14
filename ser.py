@@ -50,7 +50,7 @@ def create_server_socket():
                 elif seperate_data[0] == "write":
                     write(connection, seperate_data, client_id)
                 elif seperate_data[0] == "delete":
-                    break;
+                    delete(connection, split_data, client_id)
                 elif seperate_data[0] == "lock":
                     break;
                 elif seperate_data[0] == "release":

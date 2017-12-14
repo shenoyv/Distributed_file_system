@@ -196,7 +196,7 @@ class FileSystemManager:
         file_path = file_path + item_name
         return file_path
 
-   
+
     # Checks if an item is locked
     # Return True : Item is locked
     # Returns False : Item is not locked
@@ -290,6 +290,34 @@ class FileSystemManager:
         # If item had previously never existed
         if lock_res == 2:
             return 0
+        # release it
+        self.release_item(client, item_name)
+        return 0
+        # Deletes a file
+        # Return 0 : Delete successfull
+        # Return 1 : Delete unsuccessfull, File locked
+        # Return 2 : Delete unsuccessfull, File is a Directory
+        # Return 3 : Delete unsuccessfull, File Doesn't exist
+
+    def delete_file(self, client_id, item_name):
+        item_type = self.item_exists(client_id, item_name)
+        # exit if the item does not exist
+        if item_type == -1:
+            return 3
+        # exit if the item is a directory
+        if item_type == 1:
+            return 2
+        # lock_item
+        client = self.get_active_client(client_id)
+        lock_res = self.lock_item(client, item_name)
+        # Exit if file is locked
+        if lock_res == 1:
+            return 1
+        # delete file
+        file_path = self.resolve_path(client_id, item_name)
+        os.remove(file_path)
+        # add delete event
+        self.add_event("delete " + file_path)
         # release it
         self.release_item(client, item_name)
         return 0
