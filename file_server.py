@@ -122,6 +122,17 @@ class FileSystemManager:
                 return True
         return False
 
+    def disconnect_client(self, connection, client_id):
+     # get client
+      client = self.get_active_client(client_id)
+     # remove client from active clients
+      self.remove_client(client)
+     # disconnect socket
+      connection.sendall("disconnected")
+      connection.close()
+     # add event
+      self.add_event("disconnect client %d" % client_id)
+
 
     #
     # Functions for interacting with events

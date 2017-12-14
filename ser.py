@@ -136,6 +136,88 @@ def write(connection, split_data, client_id):
         connection.sendall(response.encode())
     else:
         error_response(connection, 1)
+def delete(connection, split_data, client_id):
+    if len(split_data) == 2:
+        res = file_manager.delete_file(client_id, split_data[1])
+        response = ""
+        if res == 0:
+            response = "delete successfull"
+        elif res == 1:
+            response = "file locked"
+        elif res == 2:
+            response = "use rmdir to delete a directory"
+        elif res == 3:
+            response = "file doesn't exist"
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+def lock(connection, split_data, client_id):
+    if len(split_data) == 2:
+        client = file_manager.get_active_client(client_id)
+        res = file_manager.lock_item(client, split_data[1])
+        response = ""
+        if res == 0:
+            response = "file locked"
+        elif res == 1:
+            response = "file already locked"
+        elif res == 2:
+            response = "file doesn't exist"
+        elif res == 3:
+            response = "locking directories is not supported"
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+
+def release(connection, split_data, client_id):
+    if len(split_data) == 2:
+        client = file_manager.get_active_client(client_id)
+        res = file_manager.release_item(client, split_data[1])
+        if res == 0:
+            response = split_data[1] + " released"
+        elif res == -1:
+            response = "you do not hold the lock for %s" % split_data[1]
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+
+def mkdir(connection, split_data, client_id):
+    if len(split_data) == 2:
+        response = ""
+        res = file_manager.make_directory(client_id, split_data[1])
+        if res == 0:
+            response = "new directory %s created" % split_data[1]
+        elif res == 1:
+            response = "file of same name exists"
+        elif res == 2:
+            response = "directory of same name exists"
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+
+def rmdir(connection, split_data, client_id):
+    if len(split_data) == 2:
+        response = ""
+        res = file_manager.remove_directory(client_id, split_data[1])
+        if res == -1:
+            response = "%s doesn't exist" % split_data[1]
+        elif res == 0:
+            response = "%s removed" % split_data[1]
+        elif res == 1:
+            response = "%s is a file" % split_data[1]
+        elif res == 2:
+            response = "directory has locked contents"
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+
+def pwd(connection, split_data, client_id):
+    if len(split_data) == 1:
+        response = file_manager.get_working_dir(client_id)
+        connection.sendall(response.encode())
+    else:
+        error_response(connection, 1)
+
+
 
 
 def exit(connection, split_data, client_id):
