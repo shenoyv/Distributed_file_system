@@ -27,7 +27,7 @@ def create_server_socket():
              start_client_interaction,
              connection,
              client_addr
-         )
+             )
 
  def start_client_interaction(connection, client_addr):
         try:
@@ -52,15 +52,15 @@ def create_server_socket():
                 elif seperate_data[0] == "delete":
                      delete(connection, seperate_data, client_id)
                 elif seperate_data[0] == "lock":
-                    break;
+                    lock(connection, seperate_data, client_id)
                 elif seperate_data[0] == "release":
-                    break;
+                    release(connection, seperate_data, client_id)
                 elif seperate_data[0] == "mkdir":
                     mkdir(connection, seperate_data, client_id)
                 elif seperate_data[0] == "rmdir":
                     rmdir(connection, seperate_data, client_id)
                 elif seperate_data[0] == "pwd":
-                    break;
+                    pwd(connection, seperate_data, client_id)
                 elif seperate_data[0] == "exit":
                     break;
                 else:
