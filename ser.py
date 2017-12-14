@@ -50,15 +50,15 @@ def create_server_socket():
                 elif seperate_data[0] == "write":
                     write(connection, seperate_data, client_id)
                 elif seperate_data[0] == "delete":
-                    delete(connection, split_data, client_id)
+                     delete(connection, seperate_data, client_id)
                 elif seperate_data[0] == "lock":
                     break;
                 elif seperate_data[0] == "release":
                     break;
                 elif seperate_data[0] == "mkdir":
-                    break;
+                    mkdir(connection, seperate_data, client_id)
                 elif seperate_data[0] == "rmdir":
-                    break;
+                    rmdir(connection, seperate_data, client_id)
                 elif seperate_data[0] == "pwd":
                     break;
                 elif seperate_data[0] == "exit":

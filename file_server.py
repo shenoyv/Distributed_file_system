@@ -322,6 +322,49 @@ class FileSystemManager:
         self.release_item(client, item_name)
         return 0
 
+        # Makes new directory in current directory
+        # return 0 : successfull
+        # return 1 : file of same name exists
+        # return 2 : directory of same name exists
+        def make_directory(self, client_id, directory_name):
+            path = self.resolve_path(client_id, directory_name)
+            exists = self.item_exists(client_id, directory_name)
+            # is file
+            if exists == 0:
+                return 1
+            # is dir
+            elif exists == 1:
+                return 2
+            # doesn't exist
+            elif -1:
+                os.makedirs(path)
+                self.add_event("mkdir " + path)
+                return 0
+
+        # remove directory
+        # return -1 : directory doesn't exist
+        # return 0 : successfull
+        # return 1 : is a file
+        # return 2 : directory has locked contents
+        def remove_directory(self, client_id, directory_name):
+            path = self.resolve_path(client_id, directory_name)
+            item_type = self.item_exists(client_id, directory_name)
+            if item_type == -1:
+                return -1
+            elif item_type == 0:
+                return 1
+            elif item_type == 1:
+                directory_has_locked_elements = False
+                for lock_record in self.locked_files:
+                    if lock_record[2][0:len(path)] == path:
+                        directory_has_locked_elements = True
+                if directory_has_locked_elements:
+                    return 2
+                else:
+                    shutil.rmtree(path)
+                    self.add_event("rmdir " + path)
+                    return 0
+
 
     #
     # Testing functions
