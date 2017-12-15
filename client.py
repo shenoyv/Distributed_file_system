@@ -11,7 +11,7 @@ response_var = ""
 def connect():
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock_addr = (ip_addr, port)
+    sock_addr = ('127.0.0.1', port)
     print("connecting to %s on port %s\n" % sock_addr)
     sock.connect(sock_addr)
     client_thread.add_task(

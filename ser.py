@@ -5,31 +5,30 @@ import file_server
 # global threadpool for server
 server_thread = threadpool.ThreadPool(500)
 
-port_number = 1024
+port_number = 8018
 
 ip_addr = socket.gethostbyname(socket.gethostname())
 
-file_manager = file_server.FileSystemManager('FileSystemDir')
+file_manager = file_server.FileSystemManager('files')
 
 def create_server_socket():
-    # create socket  and initialise to localhost:8000
+    #create socket  and initialise to localhost:8000
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock_addr = ('127.0.0.1', port_number)
     print("starting server on %s port %s" % sock_addr)
-    # bind socket to server address and wait for incoming connections4
+    #bind socket to server address and wait for incoming connections4
     sock.bind(sock_addr)
     sock.listen(1)
 
     while True:
-
-        connection, client_address = sock.accept()
+        connection, client_addr = sock.accept()
         server_thread.add_task(
-             start_client_interaction,
-             connection,
-             client_addr
-             )
+            start_client_interaction,
+            connection,
+            client_addr
+        )
 
- def start_client_interaction(connection, client_addr):
+def start_client_interaction(connection, client_addr):
         try:
             # A client id is generated, that is associated with this client
             client_id = file_manager.add_client(connection)
@@ -216,10 +215,6 @@ def pwd(connection, split_data, client_id):
         connection.sendall(response.encode())
     else:
         error_response(connection, 1)
-
-
-
-
 def exit(connection, split_data, client_id):
     if len(split_data) == 1:
         file_manager.disconnect_client(connection, client_id)
