@@ -5,7 +5,7 @@ import file_server
 # global threadpool for server
 server_thread = threadpool.ThreadPool(500)
 
-port_number = 8018
+port_number = 8019
 
 ip_addr = socket.gethostbyname(socket.gethostname())
 
@@ -67,10 +67,6 @@ def start_client_interaction(connection, client_addr):
         except:
             error_response(connection, 0)
             connection.close()
-
-
-
-
 def kill_service(connection):
     # Kill service
     response = "Killing Service"

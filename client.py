@@ -4,7 +4,7 @@ import time
 import os
 client_thread = threadpool.ThreadPool(5)
 ip_addr = socket.gethostbyname(socket.gethostname())
-port = 8018
+port = 8019
 cache_time = 2
 cache_queue = []
 response_var = ""
